@@ -1,0 +1,25 @@
+<ActionBar title="Screenshot App"></ActionBar>
+
+<ScrollView>
+  <StackLayout class="p-4">
+    <TextField [(ngModel)]="url" hint="Enter URL" returnKeyType="done" (returnPress)="onUrlSubmit()" class="mb-4"></TextField>
+    <Button text="Take Screenshot and Crawl" (tap)="onUrlSubmit()" class="mb-4" [isEnabled]="!isLoading"></Button>
+    <ActivityIndicator [busy]="isLoading" class="mb-4"></ActivityIndicator>
+    <Button [text]="isMobileView ? 'Switch to Desktop View' : 'Switch to Mobile View'" (tap)="toggleView()" class="mb-4"></Button>
+    <Button [text]="isWebViewMode ? 'Switch to UI Screenshot Mode' : 'Switch to WebView Screenshot Mode'" (tap)="toggleScreenshotMode()" class="mb-4"></Button>
+
+    <WebView id="mobileWebView" *ngIf="isMobileView && isWebViewMode" [src]="url" width="320" height="480" class="mb-4"></WebView>
+    <WebView id="desktopWebView" *ngIf="!isMobileView && isWebViewMode" [src]="url" width="1024" height="768" class="mb-4"></WebView>
+
+    <Label *ngIf="!isWebViewMode" [text]="'Current mode: ' + (isMobileView ? 'Mobile UI' : 'Desktop UI')" class="mb-4"></Label>
+
+    <Image *ngIf="screenshotPath" [src]="screenshotPath" stretch="aspectFit" class="mb-4"></Image>
+
+    <Label text="Crawled Links:" class="mb-2" *ngIf="links.length > 0"></Label>
+    <ListView [items]="links" class="mb-4" *ngIf="links.length > 0">
+      <ng-template let-link="item">
+        <Label [text]="link" textWrap="true" class="mb-2"></Label>
+      </ng-template>
+    </ListView>
+  </StackLayout>
+</ScrollView>
